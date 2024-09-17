@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      .dropdown-submenu {
+        position: relative;
+      }
+
+      .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Multi-Level Dropdowns</h2>
+      <p>
+        In this example, we have created a .dropdown-submenu class for
+        multi-level dropdowns (see style section above).
+      </p>
+      <p>
+        Note that we have added jQuery to open the multi-level dropdown on click
+        (see script section below).
+      </p>
+      <div class="dropdown">
+        <button
+          class="btn btn-default dropdown-toggle"
+          type="button"
+          data-toggle="dropdown"
+        >
+          Facebook <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" id="container-1">
+          <!-- <li><a tabindex="-1" href="#">HTML</a></li>
+          <li><a tabindex="-1" href="#">CSS</a></li> -->
+          <li class="dropdown-submenu">
+            <a class="test" tabindex="-1" href="#"
+              >New dropdown <span class="caret"></span
+            ></a>
+            <ul class="dropdown-menu">
+              <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+              <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+              <li class="dropdown-submenu">
+                <a class="test" href="#"
+                  >Another dropdown <span class="caret"></span
+                ></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">3rd level dropdown</a></li>
+                  <li><a href="#">3rd level dropdown</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li class="dropdown-submenu">
+            <a class="test" tabindex="-1" href="#"
+              >New dropdown <span class="caret"></span
+            ></a>
+            <ul class="dropdown-menu">
+              <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+              <li><a tabindex="-1" href="#">2nd level dropdown</a></li>
+              <li class="dropdown-submenu">
+                <a class="test" href="#"
+                  >Another dropdown <span class="caret"></span
+                ></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">3rd level dropdown</a></li>
+                  <li><a href="#">3rd level dropdown</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $(".dropdown-submenu a.test").on("click", function (e) {
+          $(this).next("ul").toggle();
+          e.stopPropagation();
+          e.preventDefault();
+        });
+      });
+    </script>
+    <!-- <script>
+      $("#facebook").one("click", function () {
+        $.get(
+          "https://localhost:5000/api/v1/get-facebook-pages",
+          function (data, status) {
+            //alert("Data" + data + "\nStaus " + status);
+            for (let i = 0; i < data.length; i++) {
+              const _items = Object.entries(data[i]);
+              //console.log(_items[0][0]);
+              $("#container-1")
+                .append(
+                  `<input type="radio" id="${_items[0][0]}" name="page" value="${_items[0][0]}">`
+                )
+                .append(
+                  `<label for="${_items[0][0]}">${_items[0][1]}</label></div>`
+                )
+                .append(
+                  '<button class="btn" type="submit" id="show-posts">show posts</button>'
+                )
+                .append("<br>");
+            }
+          }
+        );
+        $(this).attr("disabled", "disabled"); //Disables #facebook button after one click using the .one("click", ()=>{})
+      });
+    </script>
+
+    <script>
+      const btn = document.querySelector("#show-posts");
+      const radioButtons = document.querySelectorAll('input[name="page"]');
+      btn.addEventListener("click", () => {
+        let selectedPage;
+        for (const radioButton of radioButtons) {
+          if (radioButtons.checked) {
+            selectedPage = radioButton.value;
+            break;
+          }
+        }
+        //showing output'
+        selectedPage
+          ? console.log(selectedPage)
+          : console.log("Please select a page");
+      });
+    </script> -->
+  </body>
+</html>

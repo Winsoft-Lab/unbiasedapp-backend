@@ -1,69 +1,70 @@
-{% extends "Home/layout/main-layout.html" %}
-{% block title%}Login{% endblock %}
+{% extends "Home/layout/main-layout.html" %} {% block title%}Login{% endblock %}
 {% block stylesheet %}
-    <style>
-        .card-container{
-        background-color: rgba(48, 176, 180, 0.418);
-        border-radius: 1em;
-        text-align: center;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%) ;
-        }
-    </style>
-{% endblock %}
-{% block page_content %}
-    <div class="container">
-        <div class="card card-container shadow">
-            
-            <div class="card-header">
-                <h5 class="title">Login</h5>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="btn">
-                       <p><i class="fa-brands fa-instagram"></i></p> 
-                    </div>
-                    <div class="btn">
-                        <p><i class="fa-brands fa-facebook"></i></p>
-                    </div>
-                    <div class="btn">
-                        <p><i class="fa-brands fa-twitter"></i></p>
-                    </div>
-                    <div class="btn">
-                       <p><i class="fa-brands fa-google "></i></p> 
-                    </div>
-                </div>
-
-                {% for field, errors in form.errors.items() %}
-                    {{ ', '.join(errors) }}
-                {% endfor %}
-                <form  role="form" action="" method="post">
-                    {{ form.hidden_tag() }} 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">@</span>
-                        {{ form.email(class="form-control", placeholder="email@example.com") }}
-                        <!---input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required--->
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon4">&#x1F511;</span>
-                        {{ form.password(class="form-control", type="password", placeholder="password") }}
-                        <!---input type="password" class="form-control" placeholder="Password"  aria-describedby="basic-addon1" required--->
-                    </div>
-                    <div>
-                        {{ form.submit() }} <br>
-                        {{ form.remember_me.label}} {{form.remember_me()}}
-                    </div>
-                    <p>
-                        Don't have an account? 
-                        <a href="{{ url_for('auth.signup') }}" class="text-primary">Signup</a>
-                    </p>
-                    
-                </form>
-            </div>
-        </div>
+<style>
+  .card-container {
+    background-color: rgba(48, 176, 180, 0.418);
+    border-radius: 1em;
+    text-align: center;
+    padding: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+{% endblock %} {% block page_content %}
+<div class="container">
+  <div class="card card-container shadow">
+    <div class="card-header">
+      <h5 class="title">Login</h5>
     </div>
-    {% endblock %}
+    <div class="card-body">
+      <div>
+        <div class="btn">
+          <p><i class="fa-brands fa-instagram"></i></p>
+        </div>
+        <div class="btn">
+          <p>
+            <a href="{{ url_for('auth.facebook_login') }}">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+          </p>
+        </div>
+        <div class="btn">
+          <p><i class="fa-brands fa-twitter"></i></p>
+        </div>
+        <div class="btn">
+          <p><i class="fa-brands fa-google"></i></p>
+        </div>
+      </div>
+
+      {% for field, errors in form.errors.items() %} {{ ', '.join(errors) }} {%
+      endfor %}
+      <form role="form" action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">@</span>
+          {{ form.email(class="form-control", placeholder="email@example.com")
+          }}
+          <!---input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required--->
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon4">&#x1F511;</span>
+          {{ form.password(class="form-control", type="password",
+          placeholder="password") }}
+          <!---input type="password" class="form-control" placeholder="Password"  aria-describedby="basic-addon1" required--->
+        </div>
+        <div>
+          {{ form.submit() }} <br />
+          {{ form.remember_me.label}} {{form.remember_me()}}
+        </div>
+        <p>
+          Don't have an account?
+          <a href="{{ url_for('auth.signup') }}" class="text-primary">Signup</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

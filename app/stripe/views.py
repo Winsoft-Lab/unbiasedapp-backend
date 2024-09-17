@@ -4,28 +4,35 @@ from ..models import StripeCustomer
 from flask_login import current_user, login_required
 from . import stripe as str
 import stripe
-from flask import flash, jsonify, render_template, render_template_string, request, url_for, redirect
+from flask import (
+    flash,
+    jsonify,
+    render_template,
+    render_template_string,
+    request,
+    url_for,
+    redirect,
+)
 from flask_cors import cross_origin
 from app import db
 
-stripe_keys={
-            "publishable_key":os.environ.get("STRIPE_PUBLISHABLE_KEY"),
-            "secret_key":os.environ.get("STRIPE_SECRET_KEY"),
-            "endpoint_secret": os.environ.get("STRIPE_ENDPOINT_SECRET"),
-            }
+stripe_keys = {
+    "publishable_key": os.environ.get("STRIPE_PUBLISHABLE_KEY"),
+    "secret_key": os.environ.get("STRIPE_SECRET_KEY"),
+    "endpoint_secret": os.environ.get("STRIPE_ENDPOINT_SECRET"),
+}
 
 
-@str.route('/subscription', methods=['GET','POST'])
-#@login_required
+@str.route("/subscription", methods=["GET", "POST"])
+# @login_required
 def subscription():
     customer = StripeCustomer.query.filter_by(user_id=current_user.id).first()
     if customer:
-        next = request.args.get('next')
-        if next is None or not next.startswith('/'):
-            next = url_for('main.home')
+        next = request.args.get("next")
+        if next is None or not next.startswith("/"):
+            next = url_for("main.home")
             return redirect(next)
-    return render_template('stripay/index.html')
-
+    return render_template("stripay/index.html")
 
 
 '''@stripay.route('/', methods=["GET","POST"])
@@ -55,52 +62,48 @@ def index():
     return render_template('stripay/stripay.html')'''
 
 
-
 @str.route("/config")
 @cross_origin()
 def get_publishabel_key():
-    stripe_config = {'publicKey':stripe_keys["publishable_key"]}
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
 
     return stripe_config
 
 
-@str.route('/create-checkout-session', methods=["GET", "POST"])
+@str.route("/create-checkout-session", methods=["GET", "POST"])
 @cross_origin()
 def create_checkout_session():
 
     data = request.json
 
-    domain_url ="/stripy/order/"
-    
+    domain_url = "/stripy/order/"
+
     stripe.api_key = stripe_keys["secret_key"]
 
     try:
         checkout_session = stripe.checkout.Session.create(
-            #Get the user id here and pass it along as client_reference_id
-            #This will allow you to associate the stripe session with  the user saved in the database
-            #eg: Client_reference_id = user.id,
-            client_reference_id = current_user.id,
-            success_url = "/dashboard", #domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
-            cancel_url = domain_url + "cancel",
+            # Get the user id here and pass it along as client_reference_id
+            # This will allow you to associate the stripe session with  the user saved in the database
+            # eg: Client_reference_id = user.id,
+            client_reference_id=current_user.id,
+            success_url="/dashboard",  # domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancel",
             payment_method_types=["card"],
             mode="subscription",
             line_items=[
-                {
-                    "price":data["priceId"],
-                    "quantity":1
-                },
-            ]
+                {"price": data["priceId"], "quantity": 1},
+            ],
         )
 
         return {"sessionId": checkout_session["id"]}
 
     except Exception as e:
-        error=str(e)
+        error = str(e)
 
         return error, 403
 
 
-@str.route('/webhook', methods=["POST"])
+@str.route("/webhook", methods=["POST"])
 def stripe_webhook():
 
     payload = request.get_data(as_text=True)
@@ -112,26 +115,24 @@ def stripe_webhook():
             payload, sig_header, stripe_keys["endpoint_secret"]
         )
     except ValueError as e:
-        #Invalid payload
+        # Invalid payload
         return "Invalid payload", 400
-    
+
     except stripe.error.SignatureVerificationError as e:
 
-        #Invalid signature
+        # Invalid signature
 
         return "Invalid signature", 400
 
-    #handling checkout.session.completed event
+    # handling checkout.session.completed event
 
-    if event['type'] == "checkout.session.completed":
-        
+    if event["type"] == "checkout.session.completed":
+
         session = event["data"]["object"]
 
         handle_checkout_session(session)
 
-        #Fulfill the purchase
-        
-
+        # Fulfill the purchase
 
     return "Success", 200
 
@@ -142,16 +143,17 @@ def handle_checkout_session(session):
     the database. eg.(associate the user with their subscription)
 
     """
-    
-    #subscription_database = StripeCustomer.query.filter_by(StripeSubscriptionId=session["subscription"]).first()
 
+    # subscription_database = StripeCustomer.query.filter_by(StripeSubscriptionId=session["subscription"]).first()
 
-    #if subscription_database:
-        #pass
+    # if subscription_database:
+    # pass
 
-    new_checkout= StripeCustomer( user_id = session['client_reference_id'],
-                    StripeCustomerId=session["customer"],
-                  StripeSubscriptionId= session["subscription"])
+    new_checkout = StripeCustomer(
+        user_id=session["client_reference_id"],
+        StripeCustomerId=session["customer"],
+        StripeSubscriptionId=session["subscription"],
+    )
 
     db.session.add(new_checkout)
     db.session.commit()
@@ -161,36 +163,31 @@ def handle_checkout_session(session):
     print(message)
 
 
-
-@str.route('/order/success', methods=["GET"])
+@str.route("/order/success", methods=["GET"])
 def success():
 
-    sess = stripe.checkout.Session.retrieve(request.args.get('session_id'))
+    sess = stripe.checkout.Session.retrieve(request.args.get("session_id"))
 
     customer = stripe.Customer.retrieve(sess.customer)
 
-    return render_template_string('<html><body><h1>Thanks for your order, {{ customer.name }}!</h1></body></html>', customer=customer)
+    return render_template_string(
+        "<html><body><h1>Thanks for your order, {{ customer.name }}!</h1></body></html>",
+        customer=customer,
+    )
 
 
-
-
-@str.route('/order/cancel', methods=["GET"])
+@str.route("/order/cancel", methods=["GET"])
 def cancel():
     flash("Subscription cancelled")
-    return redirect(url_for('main.home'))
+    return redirect(url_for("main.home"))
 
 
-
-
-
-
-
-@str.route('/change-subscription', methods=["POST"])
+@str.route("/change-subscription", methods=["POST"])
 def change_subscription():
     stripe.api_key = stripe_keys["secret_key"]
 
     data = request.json
-    
+
     customer = StripeCustomer.query.filter_by(user_id=current_user.id).first()
 
     subscription = stripe.Subscription.retrieve(customer.StripeSubscriptionId)
@@ -198,14 +195,10 @@ def change_subscription():
     modified_subscription = stripe.Subscription.modify(
         subscription.id,
         cancel_at_period_end=False,
-        proration_behavior='create_prorations',
-        items=[{
-            'id':subscription['items']['data'][0].id,
-            'price': data["priceId"]
-        }]
+        proration_behavior="create_prorations",
+        items=[{"id": subscription["items"]["data"][0].id, "price": data["priceId"]}],
     )
 
+    message = "Plan upgrade successfully"
 
-    message = 'Plan upgrade successfully'
-
-    return message 
+    return message

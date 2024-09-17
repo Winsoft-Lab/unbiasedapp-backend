@@ -1,21 +1,77 @@
+<!--   Core JS Files   -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="../../static/js/core/jquery.min.js"></script>
+<script src="../../static/js/core/popper.min.js"></script>
+<script src="../../static/js/core/bootstrap.min.js"></script>
+<script src="../../static/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/nanobar/0.2.1/nanobar.min.js"></script>
+<!-- Chart JS -->
+<script src="../../static/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="../../../static/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+<script src=".../../static/js/core/black-dashboard.min.js"></script>
+<!-- Black Dashboard DEMO methods, don't include it in your project! -->
+<script src="../../static/analysis/analysis.js"></script>
+<script src="{{ url_for('static', filename='js/stripe-change-subscription.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress-bar.js') }}"></script>
 
-  <!--   Core JS Files   -->
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="../../static/js/core/jquery.min.js"></script>
-  <script src="../../static/js/core/popper.min.js"></script>
-  <script src="../../static/js/core/bootstrap.min.js"></script>
-  <script src="../../static/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/nanobar/0.2.1/nanobar.min.js"></script>
-  <!-- Chart JS -->
-  <script src="../../static/js/plugins/chartjs.min.js"></script>
-  <!--  Notifications Plugin    -->
-  <script src="../../../static/js/plugins/bootstrap-notify.js"></script>
-  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src=".../../static/js/core/black-dashboard.min.js"></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
-  <script src="../../static/analysis/analysis.js"></script>
-  <script src="{{ url_for('static', filename='js/stripe-change-subscription.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/progress-bar.js') }}"></script>
+<!--script src="../../static/js/analysis_plot.js"></script-->
 
-  <!--script src="../../static/js/analysis_plot.js"></script-->
+<!-- <script>
+  $("#facebook").one("click", function () {
+    $.get(
+      "https://localhost:5000/api/v1/get-facebook-pages",
+      function (data, status) {
+        //alert("Data" + data + "\nStaus " + status);
+        for (let i = 0; i < data.length; i++) {
+          const _items = Object.entries(data[i]);
+          //console.log(_items[0][0]);
+          $("#container-1")
+            .append(
+              `<input type="radio" id="${_items[0][0]}" name="page" value="${_items[0][0]}">`
+            )
+            .append(
+              `<label for="${_items[0][0]}">${_items[0][1]}</label></div>`
+            )
+            .append(
+              '<button class="btn" type="submit" id="show-posts">show posts</button>'
+            )
+            .append("<br>");
+        }
+      }
+    );
+    $(this).attr("disabled", "disabled"); //Disables #facebook button after one click using the .one("click", ()=>{})
+  });
+</script>
 
-
+<script>
+  const btn = document.querySelector("#show-posts");
+  const radioButtons = document.querySelectorAll('input[name="page"]');
+  btn.addEventListener("click", () => {
+    let selectedPage;
+    for (const radioButton of radioButtons) {
+      if (radioButtons.checked) {
+        selectedPage = radioButton.value;
+        break;
+      }
+    }
+    //showing output'
+    selectedPage
+      ? console.log(selectedPage)
+      : console.log("Please select a page");
+  });
+</script> -->
+<!-- <script>
+  $(document).ready(function() {
+    $('#submit').click(function() {
+        var radios = ['Email', 'Phone', 'Mail'];
+        for (var value of radios) {
+        $('#container')
+            .append(`<input type="radio" id="${value}" name="contact" value="${value}">`)
+            .append(`<label for="${value}">${value}</label></div>`)
+            .append(`<br>`);
+        }
+    })
+});
+</script> -->

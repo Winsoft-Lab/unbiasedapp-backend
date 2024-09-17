@@ -10,10 +10,16 @@ def subscription_required(f):
     Before allowing them to acesss the dashboard
     if not a customer, it redirects them to the subscription page.
     """
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         customer = StripeCustomer.query.filter_by(user_id=current_user.id).first()
         if customer is None:
-            return redirect(url_for('stripay.subscription', next=request.url))
+            return redirect(url_for("stripay.subscription", next=request.url))
         return f(*args, **kwargs)
+
     return decorated_function
+
+
+# TODO A decorator that requires tokon bearer auth.
+# TODO A function that generates token on login

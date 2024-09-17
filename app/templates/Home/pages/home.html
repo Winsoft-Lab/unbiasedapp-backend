@@ -20,17 +20,17 @@
                            
                               <!--div class="col-auto">
                                  <input type="search" class="form-control" />
+                                  <div class="nav-item">
+            <a class="nav-link" href="{{ url_for('main.dashboard')}}">Dashboard</a>
+         </div>
                               </div-->
                               <div class="col-auto">
-                                 <a href="{{ url_for('stripe.subscription')}}">
+                                 <a href="{{ url_for('main.dashboard')}}">
                                     <button class="btn btn-success " id="DEMO">DEMO</button>
                                  </a>
                               </div>
                               <div>
-                              {% include 'Home/components/socialLoginButtons.html' %}
-                              </div>
-                              <div>
-                                <!---{% include 'Home/components/fb_login.html' %}--->
+                              <!---{% include 'Home/components/socialLoginButtons.html' %}--->
                               </div>
                      </div>
                   </div>

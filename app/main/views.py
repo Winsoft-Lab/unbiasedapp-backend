@@ -1,84 +1,95 @@
-import os
-from flask import jsonify, render_template, request, session
+from flask import render_template, request, session, flash, redirect
 from flask_cors import cross_origin
 from . import main
 from app import db
 from flask_login import current_user, login_required
 from jinja2 import TemplateNotFound
-from ..models import User,StripeCustomer #THis will be used to load the user model
+from ..models import User, StripeCustomer  # THis will be used to load the user model
 from ..decorators import subscription_required
 import stripe
 
 
-@main.route('/', methods=["GET","POST"])
+@main.route("/", methods=["GET", "POST"])
 def home():
-    return render_template('Home/layout/main-layout.html')
+    return render_template("Home/layout/main-layout.html")
 
 
-@main.route('/dashboard', methods=["GET","POST"])
+@main.route("/admin", methods=["GET"])
+@login_required
+def admin():
+    # check permission
+    user = User.query.filter_by(email=current_user.email).first()
+
+    if user.email == "anabantiakachi1@gmail.com":
+
+        users = User.query.all()
+
+        return render_template("Home/admin.html", users=users)
+    flash("unauthorized")
+    return redirect("/")
+
+
+@main.route("/dashboard", methods=["GET", "POST"])
 @cross_origin()
-#@login_required
-#@subscription_required #New subscription required decorator
+# @login_required
+# @subscription_required #New subscription required decorator
 def dashboard():
-    try:
+    # try:
 
-        stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
-        
-        customer = StripeCustomer.query.filter_by(user_id=current_user.id).first()
+    #     stripe.api_key = os.environ.get("STRIPE_SECRET_KEY")
 
-        subscription = stripe.Subscription.retrieve(customer.StripeSubscriptionId)
-        product = stripe.Product.retrieve(subscription.plan.product)
+    #     customer = StripeCustomer.query.filter_by(user_id=current_user.id).first()
 
-        context ={
-            "subscription":subscription,
-            "product":product,
-        }
-    except:
-        return render_template('dashboard/index.html', segment='index')
-        
-    return render_template('dashboard/index.html', segment='index', **context)
+    #     subscription = stripe.Subscription.retrieve(customer.StripeSubscriptionId)
+    #     product = stripe.Product.retrieve(subscription.plan.product)
 
-    
+    #     context ={
+    #         "subscription":subscription,
+    #         "product":product,
+    #     }
+    # except:
+    #     return render_template('dashboard/index.html', segment='index')
 
-@main.route('/profile', methods=['GET, POST'])
+    return render_template("dashboard/index.html", segment="index")
+    # return render_template('dashboard/index.html', segment='index', **context)
+
+
+@main.route("/profile", methods=["GET, POST"])
 @login_required
 def profile():
-    return render_template('dashboard/page-user.html', segment='page-user')
+    return render_template("dashboard/page-user.html", segment="page-user")
 
 
-
-
-@main.route('/<template>')
+@main.route("/<template>")
 @login_required
 def route_template(template):
 
     try:
 
-        if not template.endswith('.html'):
+        if not template.endswith(".html"):
             pass
 
         # Detect the current page
         segment = get_segment(request)
 
         # Serve the file (if exists) from app/templates/home/FILE.html
-        return render_template('dashboard/' + template, segment=segment)
+        return render_template("dashboard/" + template, segment=segment)
 
     except TemplateNotFound:
-        return render_template('dashboard/page-404.html'), 404
+        return render_template("dashboard/page-404.html"), 404
 
     except:
-        return render_template('dashboard/page-500.html'), 500
-
+        return render_template("dashboard/page-500.html"), 500
 
 
 def get_segment(request):
 
     try:
 
-        segment = request.path.split('/')[-1]
+        segment = request.path.split("/")[-1]
 
-        if segment == '':
-            segment = 'home'
+        if segment == "":
+            segment = "index"
 
         return segment
 

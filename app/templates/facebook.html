@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="card">
+      <div class="card-body">
+        <select class="facebook" id="pages" onchange="update()" >
+    </select>
+
+      </div>
+      
+      
+    </div>
+    
+    <div class="container" id="fb_posts">
+
+    </div>
+
+
+    <script type="text/javascript">
+      //Sends a request to extract the available facebook post for the particular page
+      //It is the supposed to create option of items
+      function update(){
+
+         const select = document.getElementById("pages");
+         const option = select.options[select.selectedIndex];
+
+         page_id = option.value
+
+        $.get(`https://localhost:5000/api/v1/show-page-posts/${option.value}`, (data, status) => {
+          console.log(data)
+        })
+      }
+
+      update();
+    </script>
+    </script>
+
+    <script>
+      //Sends a request to extract the available facebook pages
+      //Then creates a select option for the available pages
+      $(".facebook").one("click", function () {
+        $.get(
+          `https://localhost:5000/api/v1/get-facebook-pages`,
+          function (data, status) {
+            for (let i = 0; i < data.length; i++) {
+              const _items = Object.entries(data[i]);
+              $("#pages").append(
+                `<option  value="${_items[0][0]}" name="page">${_items[0][1]}</option>`
+              );
+    
+            }
+          }
+        );
+      });
+    </script>
+
+    <script>
+    </script>
+  </body>
+</html>

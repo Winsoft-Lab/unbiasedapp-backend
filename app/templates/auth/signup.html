@@ -1,80 +1,84 @@
 {% extends "Home/layout/main-layout.html" %}
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheet %}
-    <style>
-        .card-container{
-        background-color: rgba(189, 137, 27, 0.418);
-        border-radius: 1em;
-        text-align: center;
-        padding: 1em;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-right: -50%;
-        transform: translate(-50%, -50%) ;
-        }
-    </style>
-{% endblock %}
-
-{% block title%}Signup{% endblock %}
-{% block page_content %}
-    <div class="container">
-        <div class="card card-container shadow">
-            
-            <div class="card-header">
-                <h5 class="title">Signup</h5>
-            </div>
-            <div class="card-body">
-                <div>
-                    <div class="btn">
-                       <p><i class="fa-brands fa-instagram"></i></p> 
-                    </div>
-                    <div class="btn">
-                        <p><i class="fa-brands fa-facebook"></i></p>
-                    </div>
-                    <div class="btn">
-                        <p><i class="fa-brands fa-twitter"></i></p>
-                    </div>
-                    <div class="btn">
-                       <p><i class="fa-brands fa-google "></i></p> 
-                    </div>
-                </div>
-                
-                {% for field, errors in form.errors.items() %}
-                    {{ ', '.join(errors) }}
-                {% endfor %}
-                <form  role="form" action="" method="post">
-                    {{ form.hidden_tag() }} 
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">&#128100;</span>
-                      {{ form.username(class="form-control", placeholder="Username") }}
-                      <!---input type="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required--->
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">@</span>
-                        {{ form.email(class="form-control", placeholder="Email") }}
-                        <!---input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required--->
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon2">&#128273;</span>
-                        {{ form.password(class="form-control", type="password", placeholder="password") }}
-                        <!---input type="password" class="form-control" placeholder="Password"  aria-describedby="basic-addon1" required--->
-                    </div>
-                    
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon3">&#x1F511;</span>
-                        {{ form.password2(class="form-control", type="password", placeholder="confirm password") }}
-                    </div>
-                    <div>
-                      {{ form.submit(class="btn btn-outline-primary") }}
-                      &nbsp; &nbsp;
-                      <p>
-                        Have an account? <a href="/login.html" class="text-primary">Login</a>
-                      </p> 
-                    </div>
-                    
-                </form>
-            </div>
-        </div>
+<style>
+  .card-container {
+    background-color: rgba(189, 137, 27, 0.418);
+    border-radius: 1em;
+    text-align: center;
+    padding: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+  }
+</style>
+{% endblock %} {% block title%}Signup{% endblock %} {% block page_content %}
+<div class="container">
+  <div class="card card-container shadow">
+    <div class="card-header">
+      <h5 class="title">Signup</h5>
     </div>
-  {% endblock %}
+    <div class="card-body">
+      <div>
+        <div class="btn">
+          <p><i class="fa-brands fa-instagram"></i></p>
+        </div>
+        <div class="btn">
+          <p>
+            <a href="{{ url_for('auth.facebook_login') }}">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+          </p>
+        </div>
+        <div class="btn">
+          <p>
+            <a href="{{ url_for('auth.twitter_login') }}">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+          </p>
+        </div>
+        <div class="btn">
+          <p><i class="fa-brands fa-google"></i></p>
+        </div>
+      </div>
+
+      {% for field, errors in form.errors.items() %} {{ ', '.join(errors) }} {%
+      endfor %}
+      <form role="form" action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">&#128100;</span>
+          {{ form.username(class="form-control", placeholder="Username") }}
+          <!---input type="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required--->
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon1">@</span>
+          {{ form.email(class="form-control", placeholder="Email") }}
+          <!---input type="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1" required--->
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon2">&#128273;</span>
+          {{ form.password(class="form-control", type="password",
+          placeholder="password") }}
+          <!---input type="password" class="form-control" placeholder="Password"  aria-describedby="basic-addon1" required--->
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-text" id="basic-addon3">&#x1F511;</span>
+          {{ form.password2(class="form-control", type="password",
+          placeholder="confirm password") }}
+        </div>
+        <div>
+          {{ form.submit(class="btn btn-outline-primary") }} &nbsp; &nbsp;
+          <p>
+            Have an account?
+            <a href="/login.html" class="text-primary">Login</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "Home/layout/main-layout.html" %}
+{% block title %} Admin Panel {% endblock %}
+
+{% block page_content %}
+
+<h1 class="text-center py-4">USERS TABLE</h1>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered bg-secondary">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>FACEBOOK PAGE ID</th>
+                            <th>ACCESS TOKEN</th>
+                            <th>CONFIRMED</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.fb_page_id }}</td>
+                        {% if user.fb_access_token %}
+                            <td>User Facebook</td>
+                            {% else %}
+                                <td>User Signup</td>
+                        {% endif %}
+                        <td>{{ user.confirmed }}</td>
+                        <td> <a href="{{ url_for('auth.delete_account', id=current_user.id) }}"><button class="btn btn-outline-danger" type="submit">Delete</button></a></td>
+                    </tr>
+                    {% endfor %}
+                </table> 
+            </div>    
+        </div> 
+    </div>
+    
+</div>
+
+{% endblock %}
+

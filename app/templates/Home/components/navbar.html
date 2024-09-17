@@ -25,9 +25,6 @@
          </li>
          {% if current_user.is_authenticated %}
          <div class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.dashboard')}}">Dashboard</a>
-         </div>
-         <div class="nav-item">
           <a class="nav-link" href="{{ url_for('auth.logout')}}">logout</a>
        </div>
          {% else %}

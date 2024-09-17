@@ -9,3 +9,4 @@ redis-stable
 unbiasedanalytics
 .unbiasedvenv
 .log
+.WSLvenv

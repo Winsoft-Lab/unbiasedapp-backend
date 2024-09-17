@@ -7,23 +7,40 @@ set the FLASK_APP = webapp.py
 
 set SECRET_KEY. FACEBOOK_APP_ID and FACEBOOK_APP_SECRET
 
-set the appropriate FLASK_ENV environment
+Kindly, visit the website https://unbiasedanalytics.herokuapp.com/ 
 
-execute the ''flask init db'' command
+Create an account and test the following API endpoints
 
-execute ''flask db migrate''
+https://unbiasedanalytics.herokuapp.com/api/v1/amazon/Roku-Streaming-Device-Vision-Controls/B09BKCDXZC
 
-execute "flask db upgrade"
+https://unbiasedanalytics.herokuapp.com/api/v1/konga/samsung-galaxy-a03-core-6-5-32gb-rom-2gb-ram-dual-sim-4g-lte-5000mah-black-5577143
 
-execute "flask run --cert=adhoc" for localhost
+https://unbiasedanalytics.herokuapp.com/api/v1/jumia/UM742MP0DHARQNAFAMZ
 
-technical ISSUE :facebook_scraper module has been disabled. This a general problem.
-    Consequence: Reimplemantation of Facebook Graph API for page acess_token to get comments made on page
-fixed issue
+INFO: The links below can only work if the user's instagram account is a business account
+and is linked with the facebook page
 
-built the selenium scrapper for Amazon and Jumia
+Hence, to be able to test these links kindly follow appropraite tutorials on how to create an instagram business account and link it
+to your facebook page
 
-download webdrivers for the OS and add to path
+https://unbiasedanalytics.herokuapp.com/api/v1/instagram/comments
 
+https://unbiasedanalytics.herokuapp.com/api/v1/facebook/page-post-comments
 
+https://unbiasedanalytics.herokuapp.com/api/v1/instagram/hashtag-search/peterobi
 
+NOTE: For users with multiple facebook pages, only the most recent page will be interacted with.
+	current API version does not provide options for multi-page/ multi-post interaction
+
+COMMON ERRORS: SessionNotCreatedException
+                from selenium.common.exceptions import SessionNotCreatedException
+
+                with the msg "SessionNotCreatedException.msg"
+
+                If you come across this kindly reload the page.
+
+NETFLIX
+YOUTUBE
+IMBD
+PLAYSTORE
+NEWS MEDIA ***
